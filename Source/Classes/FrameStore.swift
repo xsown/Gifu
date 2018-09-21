@@ -36,6 +36,8 @@ class FrameStore {
 
   /// A reference to the original image source.
   var imageSource: CGImageSource
+    
+    var frameDurationMultiple: Double = 1.0
 
   /// The index of the current GIF frame.
   var currentFrameIndex = 0 {
@@ -116,7 +118,12 @@ class FrameStore {
   /// - parameter index: The index of the duration.
   /// - returns: The duration of the given frame.
   func duration(at index: Int) -> TimeInterval {
-  return animatedFrames[safe: index]?.duration ?? TimeInterval.infinity
+    if let duration = animatedFrames[safe: index]?.duration {
+        return duration * frameDurationMultiple
+    }
+    else {
+        return TimeInterval.infinity
+    }
   }
 
   /// Checks whether the frame should be changed and calls a handler with the results.
@@ -124,6 +131,7 @@ class FrameStore {
   /// - parameter duration: A `CFTimeInterval` value that will be used to determine whether frame should be changed.
   /// - parameter handler: A function that takes a `Bool` and returns nothing. It will be called with the frame change result.
   func shouldChangeFrame(with duration: CFTimeInterval, handler: (Bool) -> Void) {
+    
     incrementTimeSinceLastFrameChange(with: duration)
 
     if currentFrameDuration > timeSinceLastFrameChange {
@@ -133,6 +141,7 @@ class FrameStore {
       incrementCurrentFrameIndex()
       handler(true)
     }
+    
   }
 }
 

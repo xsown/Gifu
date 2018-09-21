@@ -15,6 +15,7 @@ public protocol GIFAnimatable: class {
   /// Content mode used for resizing the frames.
   var contentMode: UIView.ContentMode { get set }
     
+    /// Multiple of speed, making gif playing faster or slower
     var speed: Double { get set }
 }
 

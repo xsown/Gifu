@@ -3,7 +3,12 @@ import UIKit
 /// Responsible for parsing GIF data and decoding the individual frames.
 public class Animator {
     
-    var speed: Double = 1.0 // multiple of speed, making gif playing faster or slower
+    // multiple of speed, making gif playing faster or slower
+    var speed: Double = 1.0 {
+        didSet {
+            applySpeedToFrameStore()
+        }
+    }
 
   /// Total duration of one animation loop
   var loopDuration: TimeInterval {
@@ -60,11 +65,18 @@ public class Animator {
         return
     }
     
-    let duration = displayLink.duration * speed
-    store.shouldChangeFrame(with: duration) {
+    store.shouldChangeFrame(with: displayLink.duration) {
       if $0 { delegate.animatorHasNewFrame() }
     }
   }
+    
+    
+    func applySpeedToFrameStore() {
+        guard speed > Double.ulpOfOne else {
+            return
+        }
+        frameStore?.frameDurationMultiple = 1.0 / speed
+    }
 
   /// Prepares the animator instance for animation.
   ///
@@ -98,6 +110,7 @@ public class Animator {
                             contentMode: contentMode,
                             framePreloadCount: frameBufferCount,
                             loopCount: loopCount)
+    applySpeedToFrameStore()
     frameStore!.shouldResizeFrames = shouldResizeFrames
     frameStore!.prepareFrames(completionHandler)
     attachDisplayLink()
