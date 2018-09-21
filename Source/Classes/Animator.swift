@@ -2,6 +2,8 @@ import UIKit
 
 /// Responsible for parsing GIF data and decoding the individual frames.
 public class Animator {
+    
+    var speed: Double = 1.0 // multiple of speed, making gif playing faster or slower
 
   /// Total duration of one animation loop
   var loopDuration: TimeInterval {
@@ -58,7 +60,8 @@ public class Animator {
         return
     }
     
-    store.shouldChangeFrame(with: displayLink.duration) {
+    let duration = displayLink.duration * speed
+    store.shouldChangeFrame(with: duration) {
       if $0 { delegate.animatorHasNewFrame() }
     }
   }

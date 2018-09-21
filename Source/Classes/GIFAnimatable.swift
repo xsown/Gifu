@@ -14,6 +14,8 @@ public protocol GIFAnimatable: class {
 
   /// Content mode used for resizing the frames.
   var contentMode: UIView.ContentMode { get set }
+    
+    var speed: Double { get set }
 }
 
 
@@ -21,6 +23,17 @@ public protocol GIFAnimatable: class {
 public protocol ImageContainer {
   /// Used for displaying the animation frames.
   var image: UIImage? { get set }
+}
+
+extension GIFAnimatable {
+    public var speed: Double {
+        get {
+            return animator?.speed ?? 1.0
+        }
+        set {
+            animator?.speed = newValue
+        }
+    }
 }
 
 extension GIFAnimatable where Self: ImageContainer {

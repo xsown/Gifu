@@ -36,6 +36,7 @@ class ViewController: UIViewController {
   }
 
   override func viewDidAppear(_ animated: Bool) {
+//    imageView.speed = 0.5
     self.animate()
   }
 
